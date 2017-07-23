@@ -57,3 +57,7 @@ resource "aws_db_instance" "db" {
   db_subnet_group_name = "${aws_db_subnet_group.db.name}"
   parameter_group_name = "${aws_db_parameter_group.db.name}"
 }
+
+output "connect" {
+  value = "mysql -u ${var.aws_rds_username} -p -h ${aws_db_instance.db.address}"
+}
