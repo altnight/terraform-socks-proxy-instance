@@ -49,6 +49,18 @@ resource "aws_instance" "web" {
 resource "aws_eip" "eip" {
   vpc = true
   instance = "${aws_instance.web.id}"
+  provisioner "remote-exec" {
+    connection {
+      host = "${self.public_ip}"
+      type = "ssh"
+      user = "ubuntu"
+      private_key = "${file("${var.ssh_private_key_path}")}}"
+    }
+    inline = [
+      "sudo apt-get update -y",
+      "sudo apt-get install -y mysql-client"
+    ]
+  }
 }
 
 output "eip" {

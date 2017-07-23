@@ -5,6 +5,9 @@ variable "app_name" {
 variable "ssh_private_key_path" {}
 variable "ssh_public_key_path" {}
 
+variable "aws_rds_username" {}
+variable "aws_rds_password" {}
+
 variable "aws_region" {
   default = "ap-northeast-1"
 }
