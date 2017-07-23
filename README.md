@@ -6,6 +6,7 @@ Attach polichy(IAM)
 
 - AmazonVPCFullAccess
 - AmazonEC2FullAccess
+- AmazonS3FullAccess
 
 ## USAGE
 
