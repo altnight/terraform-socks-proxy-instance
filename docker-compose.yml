@@ -1,0 +1,7 @@
+version: '2'
+services:
+  terraform:
+    image: hashicorp/terraform:light
+    volumes:
+      - "$PWD:/proj"
+    working_dir: /proj
