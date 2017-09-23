@@ -63,9 +63,24 @@ resource "aws_eip" "eip" {
   }
 }
 
+data "aws_route53_zone" "selected" {
+  name = "${var.app_domain}."
+}
+
+resource "aws_route53_record" "naked" {
+  zone_id = "${data.aws_route53_zone.selected.zone_id}"
+  name = "${data.aws_route53_zone.selected.name}"
+  type = "A"
+  ttl = "300"
+  records = ["${aws_eip.eip.public_ip}"]
+}
+
 output "eip" {
   value = "${aws_eip.eip.public_ip}"
 }
-output "command" {
+output "command(EIP)" {
   value = "ssh ubuntu@${aws_eip.eip.public_ip} -i ${var.ssh_private_key_path} -N -D 8888"
+}
+output "command(domain)" {
+  value = "ssh ubuntu@${aws_route53_record.naked.name} -i ${var.ssh_private_key_path} -N -D 8888"
 }

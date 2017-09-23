@@ -8,6 +8,7 @@ Attach polichy(IAM)
 - AmazonEC2FullAccess
 - AmazonS3FullAccess
 - AmazonRDSFullAccess
+- AmazonRoute53FullAccess
 
 ## USAGE
 
