@@ -1,6 +1,6 @@
 resource "aws_db_subnet_group" "db" {
   name = "${var.app_name}-db-subnet"
-  subnet_ids = ["${aws_subnet.public-subnet-a.id}", "${aws_subnet.public-subnet-c.id}"]
+  subnet_ids = ["${var.subnet_id_1}", "${var.subnet_id_2}"]
   tags {
     Name = "${var.app_name}-db-subnet"
   }
@@ -23,7 +23,7 @@ resource "aws_db_parameter_group" "db" {
 resource "aws_security_group" "allow_db" {
   name = "allow_db"
   description = "Allow db inbound traffic"
-  vpc_id = "${aws_vpc.vpc.id}"
+  vpc_id = "${var.vpc_id}"
   ingress {
     protocol = "tcp"
     from_port = 3306
@@ -58,6 +58,3 @@ resource "aws_db_instance" "db" {
   parameter_group_name = "${aws_db_parameter_group.db.name}"
 }
 
-output "connect" {
-  value = "mysql -u ${var.aws_rds_username} -p -h ${aws_db_instance.db.address}"
-}

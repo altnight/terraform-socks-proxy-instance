@@ -1,4 +1,4 @@
-#
+# terraform-socks-proxy-instance
 
 ## PREREQUIREMENTS
 
@@ -13,7 +13,9 @@ Attach polichy(IAM)
 ## USAGE
 
 ```
-cp secret.sh.tmpl .secret.sh
-. ./.secret.sh
-terraform apply tfs
+cp root.tf.tmpl root.tf
+$EDITOR root.tf
+terraform init
+terraform apply
 ```
+

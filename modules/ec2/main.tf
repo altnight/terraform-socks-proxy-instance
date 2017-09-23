@@ -19,7 +19,7 @@ data "aws_ami" "ubuntu-1604" {
 resource "aws_security_group" "allow_ssh" {
   name = "allow_ssh"
   description = "Allow ssh inbound traffic"
-  vpc_id = "${aws_vpc.vpc.id}"
+  vpc_id = "${var.vpc_id}"
   ingress {
     protocol = "tcp"
     from_port = 22
@@ -41,7 +41,7 @@ resource "aws_instance" "web" {
   instance_type = "t2.micro"
   vpc_security_group_ids = ["${aws_security_group.allow_ssh.id}"]
   key_name = "${aws_key_pair.key_pair.key_name}"
-  subnet_id = "${aws_subnet.public-subnet-a.id}"
+  subnet_id = "${var.vpc_subnet_id}"
   tags {
     Name = "${var.app_name}-web"
   }
@@ -75,12 +75,3 @@ resource "aws_route53_record" "naked" {
   records = ["${aws_eip.eip.public_ip}"]
 }
 
-output "eip" {
-  value = "${aws_eip.eip.public_ip}"
-}
-output "command(EIP)" {
-  value = "ssh ubuntu@${aws_eip.eip.public_ip} -i ${var.ssh_private_key_path} -N -D 8888"
-}
-output "command(domain)" {
-  value = "ssh ubuntu@${aws_route53_record.naked.name} -i ${var.ssh_private_key_path} -N -D 8888"
-}

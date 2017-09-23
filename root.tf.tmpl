@@ -1,0 +1,63 @@
+variable "app_name" {
+  default = "tf"
+}
+variable "app_domain" {
+  default = "example.com"
+}
+
+variable "ssh_private_key_path" {
+  default ="/path/to/key"
+}
+variable "ssh_public_key_path" {
+  default ="/path/to/key.pub"
+}
+
+variable "aws_rds_username" {
+  default ="username"
+}
+variable "aws_rds_password" {
+  default ="password"
+}
+
+variable "aws_region" {
+  default = "ap-northeast-1"
+}
+variable "aws_access_key" {
+  default = "accesskey"
+}
+variable "aws_secret_key" {
+  default = "secretkey"
+}
+
+provider "aws" {
+  region = "${var.aws_region}"
+  access_key = "${var.aws_access_key}"
+  secret_key = "${var.aws_secret_key}"
+}
+
+module "vpc" {
+  source = "./modules/vpc"
+}
+module "ec2" {
+  source = "./modules/ec2"
+
+  vpc_id = "${module.vpc.vpc_id}"
+  vpc_subnet_id = "${module.vpc.vpc_subnet_id}"
+
+  app_domain = "${var.app_domain}"
+  ssh_private_key_path = "${var.ssh_private_key_path}"
+  ssh_public_key_path = "${var.ssh_public_key_path}"
+}
+module "s3" {
+  source = "./modules/s3"
+}
+module "rds" {
+  source = "./modules/rds"
+
+  vpc_id = "${module.vpc.vpc_id}"
+  subnet_id_1 = "${module.vpc.vpc_subnet_id_a}"
+  subnet_id_2 = "${module.vpc.vpc_subnet_id_c}"
+
+  aws_rds_username = "${var.aws_rds_username}"
+  aws_rds_password = "${var.aws_rds_password}"
+}
